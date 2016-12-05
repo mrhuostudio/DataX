@@ -192,7 +192,10 @@ public final class RetryUtil {
         protected <T> T call(Callable<T> callable) throws Exception {
             Future<T> future = executor.submit(callable);
             try {
-                return future.get(timeoutMs, TimeUnit.MILLISECONDS);
+                //return future.get(timeoutMs, TimeUnit.MILLISECONDS);
+                T ret = future.get(timeoutMs, TimeUnit.MILLISECONDS);
+                executor.shutdown();
+                return ret;
             } catch (Exception e) {
                 LOG.warn("Try once failed", e);
                 throw e;
